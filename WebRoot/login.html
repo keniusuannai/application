@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <title>登陆页</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font: inherit;
+            vertical-align: baseline;
+            font-family: "Microsoft Yahei", Verdana, Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #F5F5F5;
+            -webkit-text-size-adjust: none;
+            -webkit-font-smoothing: antialiased;
+        }
+        @media screen and (min-width:500px){
+            body,#top,#content{
+                width: 450px;
+                margin: 0 auto;
+            }
+            input{
+                margin-left: -25px !important;
+            }
+            #submit{
+                margin-left: -15px;
+            }
+        }
+        #top {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            font-size: 1.38em;
+            line-height: 50px;
+            color: #F5F5F5;
+            border-bottom: 1px solid #C2DAF7;
+            background-color: #A22131;
+            box-shadow: 0 1px 7px #AEABAB;
+        }
+        #content{
+            margin-top: 50px;
+            padding: 0 20px;
+        }
+        input{
+            padding: 0 10px;
+            width: 100%;
+            height: 3em;
+            -webkit-appearance: none;
+            line-height: 18px;
+            display: block;
+            border: 1px solid #C9C9C9;
+            margin-left: -10px;
+        }
+        #uname{
+            border-radius: 5px 5px 0 0;
+        }
+        #pwd{
+            border-top: 0;
+            border-radius: 0 0 5px 5px;
+        }
+        #submit{
+            width: 100%;
+            height: 50px;
+            margin-top: 30px;
+            color: #333;
+            background-color: #309800;
+        }
+    </style>
+</head>
+<body>
+<div id="top">学生社团活动申请</div>
+<div id="content">
+
+    <form id="loginform" action="user/login" method="post">
+
+        <input type="text" id="uname" name="username" placeholder="用户名" autocomplete="off">
+
+        <input type="password" id="pwd" name="password" placeholder="密码">
+
+        <button id="submit">登 录</button>
+
+    </form>
+
+</div>
+</body>
+</html>

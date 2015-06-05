@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>申请日程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font: inherit;
+            vertical-align: baseline;
+            font-family: "Microsoft Yahei", Verdana, Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #F5F5F5;
+            -webkit-text-size-adjust: none;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #top {
+            position: relative;
+            text-align: center;
+            font-size: 1.38em;
+            line-height: 50px;
+            color: #F5F5F5;
+            border-bottom: 1px solid #C2DAF7;
+            background-color: #A22131;
+            box-shadow: 0 1px 7px #AEABAB;
+        }
+
+        #date {
+            text-align: center;
+            font-size: 1.8em;
+            margin: 5px 0;
+        }
+
+        #date button {
+            background-color: #F5F5F5;
+        }
+
+        #tip {
+            display: block;
+            margin: 5px 0;
+            color: red;
+        }
+
+        #table-main {
+            width: 100%;
+            border: 1px solid #dddddd;
+            border-collapse: separate;
+            border-left: 0;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+        }
+
+        #table-main th, #table-main td {
+            width: 25%;
+            padding: 8px;
+            line-height: 20px;
+            text-align: left;
+            vertical-align: top;
+            border-top: 1px solid #dddddd;
+            border-left: 1px solid #dddddd;
+        }
+
+        .list {
+            position: fixed;
+            top: -361px;
+            width: 100%;
+            min-height: 361px;
+            background-color: rgb(255, 248, 241);
+        }
+
+        .apply-post {
+            padding: 20px 20px 20px 50px;
+            min-height: 291px;
+            font-size: 1.2em;
+            line-height: 1.3em;
+        }
+
+        #postapply input, #postapply select, #postapply textarea {
+            margin-top: 10px;
+            border: 1px solid #b5b5b5;
+            border-top: 1px solid #333333;
+            font-size: 0.8em;
+        }
+
+        #table-list {
+            width: 100%;
+            margin-bottom: 5px;
+            /*min-height: 300px;*/
+        }
+
+        #table-list th, #table-list td {
+            padding: 8px;
+            line-height: 20px;
+            text-align: left;
+            vertical-align: top;
+            border-left: 0;
+            border-right: 0;
+            border-top: 1px solid #dddddd;
+        }
+
+        #table-list tbody > tr:nth-child(odd) > td, #table-list tbody > tr:nth-child(odd) > th {
+            background-color: #f9f9f9;
+        }
+
+        .btn {
+            width: 60%;
+            height: 40px;
+            margin: 0 auto;
+            position: absolute;
+            bottom: 5px;
+            left: 18%;
+            color: #F5F5F5;
+            background-color: rgb(162, 33, 49);
+        }
+
+        .post-btn {
+            width: 30%;
+            position: relative;
+            top: 5px;
+            left: 0;
+            margin-left: 20px;
+        }
+
+        .apply-list-btn {
+            width: 30%;
+            position: relative;
+        }
+
+        #title {
+            text-align: center;
+            font-size: 1.8em;
+        }
+
+        #detail {
+            padding: 20px;
+            line-height: 1.5em;
+        }
+
+        .description {
+            width: 90px;
+            font-size: 1.1em;
+            font-style: italic;
+        }
+
+        .greentd {
+            background-color: green;
+            text-align: center !important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div id="top">学生社团活动申请</div>
+<div id="contain">
+    <div id="date">
+        <button id="pre"><<</button>
+        <span><span id="year"></span>年 <span id="month"></span>月</span>
+        <button id="suf">>></button>
+    </div>
+    <span id="tip">空白处可点击申请场地</span>
+    <table id="table-main" cellpadding="10" cellspacing="0">
+        <thead>
+        <tr>
+            <th>时间</th>
+            <th>早上</th>
+            <th>下午</th>
+            <th>晚上</th>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+    </table>
+</div>
+<div class="list apply-list" data-asd="asd">
+    <table id="table-list" cellpadding="10" cellspacing="0">
+        <thead>
+        <tr>
+            <th>社团名</th>
+            <th>活动名称</th>
+            <th>活动类型</th>
+            <th>状态</th>
+        </tr>
+        </thead>
+        <tbody id="list-main">
+        </tbody>
+    </table>
+    <button class="btn apply-list-btn return-apply">申请</button>
+    <button class="close btn apply-list-btn">关闭</button>
+</div>
+<div class="list apply-detail">
+</div>
+<div class="list apply-post">
+    <form id="postapply">
+        活动时间：<span class="year" name="year">0000</span>/<span class="month" name="month">00</span>/<span class="day"
+                                                                                                         name="day">00</span>
+        <span class="apn" name="apn" value="">上午</span>
+        <br/>
+        活动地点：<select class="place">
+        <option value="">请选择地点</option>
+        <option value="小舞厅">小舞厅</option>
+        <option value="大舞厅">大舞厅</option>
+    </select> <br/>
+
+        活动类型：<select class="eventype">
+        <option value="">请选择活动类型</option>
+        <option value="类型一">类型一</option>
+        <option value="类型二">类型二</option>
+    </select> <br/>
+        活动名称：<input class="eventname" type="text"/> <br/>
+        活动人数：<input class="number" type="number" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+            onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"/> <br/>
+        活动简介：<textarea class="describe" style="height: 80px;"></textarea> <br/>
+
+    </form>
+    <button class="btn post-btn" onclick="postform()">提交</button>
+    <button class="close btn post-btn">关闭</button>
+
+
+</div>
+<script src="jquery-1.8.3.min.js"></script>
+<script>
+    var week = ["一", "二", "三", "四", "五", "六", "日"];
+    var date = new Date();
+    var year = $("#year").text(date.getFullYear());//年
+    var month = $("#month").text(date.getMonth() + 1);//月
+    var tbody = $("#tbody");//表格填充
+    var pre = $("#pre");//上一个月
+    var suf = $("#suf");//下一个月
+    var close = $(".close");
+    $(document).ready(function () {
+        createDay(date);//初始化
+
+        //根据当前年月获取所有申请
+        $.ajax({
+            type: "GET",
+            url: "apply?method=init",
+            data: {month: month.text(), year: year.text()},
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                $('.list-main').empty();   //清空弹框里面的所有内容
+                $.each(data, function (i, apply) {
+                    if (apply.status == 1) {
+                        var td = $("#tbody>tr:eq(" + (apply.hostday - 1) + ")").find("td:eq(" + (apply.hostapn + 1) + ")");
+                        td.addClass("greentd");//更改td样式
+                        td.attr("onclick", "getdetail(this)"); //更改td点击事件
+                        td.text("活动详情");//更改td内容
+                    }
+
+                });
+            }
+        });
+    });
+
+    //点击上一个月
+    pre.click(function () {
+        if (month.text() == 1) {
+            month.text(12);
+            year.text(parseInt(year.text()) - 1);
+        } else {
+            month.text(parseInt(month.text()) - 1);
+        }
+        createDay(new Date(year.text(), month.text() - 1, 1));//重新生成表格
+    });
+
+    //点击下一个月
+    suf.click(function () {
+        if (month.text() == 12) {
+            month.text(1);
+            year.text(parseInt(year.text()) + 1);
+        } else {
+            month.text(parseInt(month.text()) + 1);
+        }
+        createDay(new Date(year.text(), month.text() - 1, 1));//重新生成表格
+
+    });
+
+    //生成表格
+    function createDay(date) {
+
+        tbody.empty();//清空表格
+
+        var days = getDaysInMonth(date.getFullYear(), date.getMonth() + 1);//当月有多少天
+        var j = date.getDay() - 1;//星期
+        j = j < 0 ? 0 : j;//防止数组溢出
+        for (var i = 1; i <= days; i++) {
+            i = i < 10 ? "0" + i : i;
+            tbody.append('<tr>' +
+            '<td><span class="day">' + i + '</span>号 星期<span class="week">' + week[j++] + '</span></td>' +
+            '<td onclick="getapply(this)"></td>' +
+            '<td onclick="getapply(this)"></td>' +
+            '<td onclick="getapply(this)"></td>' +
+            '</tr>');
+            j = j > 6 ? 0 : j;
+        }
+        //每生成一次表格获取当月
+        $.ajax({
+            type: "POST",
+            url: "apply?method=init",
+            data: {month: month.text(), year: year.text()},
+            dataType: "json",
+            success: function (data) {
+                $.each(data, function (i, apply) {
+                    if (apply.status == 1) {
+                        var td = $("#tbody>tr:eq(" + (apply.hostday - 1) + ")").find("td:eq(" + (apply.hostapn + 1) + ")");
+                        td.addClass("greentd");//更改td样式
+                        td.attr("onclick", "getdetail(this)"); //更改td点击事件
+                        td.text("活动详情");//更改td内容
+                    }
+
+                });
+            }
+        });
+    }
+
+    //判断当月天数
+    function getDaysInMonth(year, month) {
+        month = parseInt(month, 10); //parseInt(number,type)这个函数后面如果不跟第2个参数来表示进制的话，默认是10进制。
+        var temp = new Date(year, month, 0);
+        return temp.getDate();
+    }
+
+    //提交申请 弹框
+    function postapply(obj) {
+        $(".apply-post").animate({top: '0'}, 300);
+
+        var apn = $(obj).index() - 1;//早中晚，012
+        var day = $(obj).parent().index() + 1;//日
+        $("#postapply .day").text(day);
+        $("#postapply .month").text(month.text());
+        $("#postapply .year").text(year.text());
+        $("#postapply .apn").text(apntostr(apn));
+        $("#postapply .apn").attr("value", apn);
+    }
+
+    //获得申请列表 弹框
+    function getapply(obj) {
+
+        $(".apply-list").animate({top: '0'}, 300);
+
+        var apn = $(obj).index();//早中晚，012
+        var day = $(obj).parent().index() + 1;//日
+        //存储apn和day方便点击申请的时候取值
+        $(".apply-list").data("apn",apn);
+        $(".apply-list").data("day",day);
+        $.ajax({
+            type: "GET",
+            url: "apply?method=list",
+            data: {apn: apn - 1, day: day, month: month.text(), year: year.text()},
+            dataType: "json",
+            success: function (data) {
+                $('#list-main').empty();   //清空弹框里面的所有内容
+                $.each(data, function (i, apply) {
+                    var str = apply.status == 0 ? "正在审核" : "已通过";
+                    $("#list-main").append("<tr>" +
+                    "<td>" + apply.hostname + "</td>" +
+                    "<td>" + apply.eventname + "</td>" +
+                    "<td>" + apply.eventype + "</td>" +
+                    "<td>" + str + "</td>" +
+                    "</tr>");
+                });
+            }
+        });
+    }
+
+    //点击审核通过的td 弹框
+    function getdetail(obj) {
+
+        $(".apply-detail").animate({top: '0'}, 300);
+
+        var apn = $(obj).index();//早中晚，012
+        var day = $(obj).parent().index() + 1;//日
+        $.ajax({
+            type: "GET",
+            url: "apply?method=detail",
+            data: {apn: apn - 1, day: day, month: month.text(), year: year.text()},
+            dataType: "json",
+            success: function (data) {
+                var str = data.hostyear + "/" + data.hostmonth + "/" + data.hostday + " " + apntostr(data.hostapn);
+                $('.apply-detail').empty();   //清空弹框里面的所有内容
+                $(".apply-detail").html('<p id="title">《' + data.eventname + '》</p>' +
+                '<table id="detail">' +
+                '<tr>' +
+                '<td class="description"><i>活动介绍 : </i></td>' +
+                '<td>' + data.describe + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td class="description"><i>主办单位 : </i></td>' +
+                '<td>' + data.hostname + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td class="description"><i>举办地点 : </i></td>' +
+                '<td>' + data.place + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td class="description"><i>活动时间 : </i></td>' +
+                '<td>' + str + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td class="description"><i>申请状态 : </i></td>' +
+                '<td>已通过</td>' +
+                '</tr>' +
+                '</table>' +
+                '<button class="close btn">返回</button>');
+            }
+        });
+    }
+    //点击关闭按钮 关闭弹框
+    close.live("click", function () {
+        $(".list").animate({top: '-361px'}, 200);
+    });
+
+    //点击弹出提交弹框
+    $(".return-apply").click(function () {
+        $(".apply-list").animate({top: '-361px'}, 200);
+        $(".apply-post").animate({top: '0'}, 200);
+        $("#postapply .day").text($(this).parent().data("day"));
+        $("#postapply .month").text(month.text());
+        $("#postapply .year").text(year.text());
+        $("#postapply .apn").text(apntostr($(this).parent().data("apn")-1));
+        $("#postapply .apn").attr("value", $(this).parent().data("apn")-1);
+    });
+
+
+    function apntostr(apn) {
+        var str;
+        switch (apn) {
+            case 0:
+                str = "上午";
+                break;
+            case 1:
+                str = "下午";
+                break;
+            case 2:
+                str = "晚上";
+                break;
+        }
+        return str;
+    }
+
+    //提交表单
+    function postform() {
+        var post=$("#postapply");
+        $.ajax({
+            type: "POST",
+            url: "apply?method=postapply",
+            data: {
+                apn: post.find(".apn").val(),
+                day: post.find(".day").text(),
+                month: post.find(".month").text(),
+                year: post.find(".year").text(),
+                place:post.find(".place").val(),
+                describe:post.find(".describe").val(),
+                eventype:post.find(".eventype").val(),
+                number:post.find(".number").val(),
+                eventname:post.find(".eventname").val()
+            },
+            dataType: "json",
+            success: function (data) {
+                if(data){
+                    alert("申请成功，请等待审核！");
+                    $(".apply-post").animate({top: '-361px'}, 200);
+                }
+            }
+        });
+    };
+</script>
+</body>
+</html>

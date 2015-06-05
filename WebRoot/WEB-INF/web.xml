@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>application</display-name>
+	<welcome-file-list>
+		<welcome-file>login.html</welcome-file>
+	</welcome-file-list>
+
+	<servlet>
+		<servlet-name>UserServlet</servlet-name>
+		<servlet-class>com.tage.servlet.UserServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UserServlet</servlet-name>
+		<url-pattern>/user/login</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ApplySerlvet</servlet-name>
+		<servlet-class>com.tage.servlet.ApplySerlvet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ApplySerlvet</servlet-name>
+		<url-pattern>/apply</url-pattern>
+	</servlet-mapping>
+
+
+</web-app>
