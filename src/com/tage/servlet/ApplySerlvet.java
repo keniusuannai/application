@@ -72,9 +72,12 @@ public class ApplySerlvet extends HttpServlet {
 			System.out.println(apply.toString());
 			boolean bool = ApplyDAO.addapply(apply);
 			response.getWriter().println(bool);
-		}else if("pass".equals(method)){
+		} else if ("pass".equals(method)) {
 			int id = Integer.parseInt(request.getParameter("id"));
-			boolean f=ApplyDAO.passapply(id);
+			boolean f = ApplyDAO.passapply(id);
+			response.getWriter().println(f);
+			//同时清空其他同时间的活动
+			ApplyDAO.deleteother(id);
 		}
 	}
 

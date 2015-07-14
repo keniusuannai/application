@@ -229,17 +229,7 @@ public class ApplyDAO {
 			String sql = "update apply_info set status=1 where applyid = '"
 					+ id + "'";
 			ps = conn.prepareStatement(sql);
-			ps.executeQuery();
-
-			String sql2 = "select status from apply_info where applyid='" + id
-					+ "'";
-			ps = conn.prepareStatement(sql2);
-			rs = ps.executeQuery();
-			if (rs.getInt(1) == 1) {
-				flag = true;
-			} else {
-				flag = false;
-			}
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			flag = false;
 			e.printStackTrace();
@@ -248,4 +238,28 @@ public class ApplyDAO {
 		}
 		return flag;
 	}
+
+	// 删除同时段的其他活动
+	public static void deleteother(int id) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean flag = true;
+		try {
+			conn = JdbcUtils.getConnection();
+			String sql = "create table tmp as select hostyear,hostmonth,hostapn from apply_info  where applyid='"
+					+ id
+					+ "';"
+					+ "delete from apply_info where (hostyear,hostmonth,hostapn) in (select hostyear,hostmonth,hostapn from tmp);"
+					+ "drop table tmp;";
+			ps = conn.prepareStatement(sql);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			flag = false;
+			e.printStackTrace();
+		} finally {
+			JdbcUtils.close(rs, ps, conn);
+		}
+	}
+
 }
