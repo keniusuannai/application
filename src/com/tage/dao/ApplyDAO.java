@@ -192,7 +192,7 @@ public class ApplyDAO {
 		boolean flag = true;
 		try {
 			conn = JdbcUtils.getConnection();
-			String sql = "insert into apply_info(userid,hostyear,hostmonth,hostday,hostapn,addtime,place,eventype,eventname,eventnumber,`describe`,hostname) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into apply_info(userid,hostyear,hostmonth,hostday,hostapn,addtime,place,eventype,eventname,number,`describe`,hostname) values(?,?,?,?,?,?,?,?,?,?,?,?)";
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, apply.getUserid());
 			ps.setInt(2, apply.getHostyear());

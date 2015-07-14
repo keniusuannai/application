@@ -7,12 +7,13 @@ package com.tage.bean;
 public class User {
 	private int userid;
 	private String username;
-	private String paddword;
+	private String password;
 	private int userNo;
 	private String organize;
 	private int phone;
 	private String remark;
 	private int right;
+	
 	public int getUserid() {
 		return userid;
 	}
@@ -25,11 +26,11 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public String getPaddword() {
-		return paddword;
+	public String getPassword() {
+		return password;
 	}
-	public void setPaddword(String paddword) {
-		this.paddword = paddword;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	public int getUserNo() {
 		return userNo;
@@ -61,5 +62,5 @@ public class User {
 	public void setRight(int right) {
 		this.right = right;
 	}
-	
+
 }
