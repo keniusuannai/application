@@ -217,4 +217,35 @@ public class ApplyDAO {
 		}
 		return flag;
 	}
+
+	// 确认申请
+	public static boolean passapply(int id) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean flag = true;
+		try {
+			conn = JdbcUtils.getConnection();
+			String sql = "update apply_info set status=1 where applyid = '"
+					+ id + "'";
+			ps = conn.prepareStatement(sql);
+			ps.executeQuery();
+
+			String sql2 = "select status from apply_info where applyid='" + id
+					+ "'";
+			ps = conn.prepareStatement(sql2);
+			rs = ps.executeQuery();
+			if (rs.getInt(1) == 1) {
+				flag = true;
+			} else {
+				flag = false;
+			}
+		} catch (SQLException e) {
+			flag = false;
+			e.printStackTrace();
+		} finally {
+			JdbcUtils.close(rs, ps, conn);
+		}
+		return flag;
+	}
 }

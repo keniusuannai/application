@@ -75,7 +75,7 @@ public class UserDAO {
 		}
 		return flag;
 	}
-
+	//根据用户id获取用户信息
 	public static Map<String, String> check(int userid) {
 		// TODO Auto-generated method stub
 		Map<String,String> map = new HashMap<String,String>();

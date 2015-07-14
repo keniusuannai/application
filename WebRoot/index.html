@@ -127,7 +127,12 @@
             left: 0;
             margin-left: 20px;
         }
-
+        .pass-btn{
+            background-color: green;
+            color: #fff;
+            padding: 5px;
+            font-size: 0.8em;
+        }
         .apply-list-btn {
             width: 30%;
             position: relative;
@@ -191,7 +196,7 @@
         <span><span id="year"></span>年 <span id="month"></span>月</span>
         <button id="suf">>></button>
     </div>
-    当前在线账户：<span id="user"></span>,<form action="/application/user?method=logout" method="GET" style="display: inline-block;margin-left: 8px;"><button>注销</button></form>
+    当前在线账户：<span id="user"></span>,<form action="user?method=logout" method="post" style="display: inline-block;margin-left: 8px;"><button>注销</button></form>
     <span id="tip">空白处可点击申请场地</span>
     <table id="table-main" cellpadding="10" cellspacing="0">
         <thead>
@@ -264,7 +269,6 @@
     var close = $(".close");
     $(document).ready(function () {
         createDay(date);//初始化
-
         //根据当前年月获取所有申请
         $.ajax({
             type: "GET",
@@ -275,11 +279,15 @@
                 console.log(data);
                 $('.list-main').empty();   //清空弹框里面的所有内容
                 $.each(data, function (i, apply) {
+                    var td = $("#tbody>tr:eq(" + (apply.hostday - 1) + ")").find("td:eq(" + (apply.hostapn + 1) + ")");
                     if (apply.status == 1) {
-                        var td = $("#tbody>tr:eq(" + (apply.hostday - 1) + ")").find("td:eq(" + (apply.hostapn + 1) + ")");
                         td.addClass("greentd");//更改td样式
                         td.attr("onclick", "getdetail(this)"); //更改td点击事件
                         td.text("活动详情");//更改td内容
+                    }else if(apply.status==0){//如果活动申请但还未有通过的，则当前td的标签+1，td变黄
+                        td.addClass("yellowtd");
+                        var i=td.find(".badge").text();
+                        td.html("<span class='badge badge-info'>"+(++i)+"</span>");
                     }
 
                 });
@@ -400,25 +408,28 @@
             dataType: "json",
             success: function (data) {
                 $('#list-main').empty();   //清空弹框里面的所有内容
+                console.log(data);
                 //判断当前用户的权限
                 var r = $("#user").data("right");
-                if(r==0){
+                if(r==0){//如果为普通用户
                     $.each(data, function (i, apply) {
                         var str = apply.status == 0 ? "正在审核" : "已通过";
                         $("#list-main").append("<tr>" +
                                 "<td>" + apply.hostname + "</td>" +
-                                "<td>" + apply.eventname + "</td>" +
+                                "<td data-id='"+apply.applyid+"'>" + apply.eventname + "</td>" +
                                 "<td>" + apply.eventype + "</td>" +
                                 "<td>" + str + "</td>" +
                                 "</tr>");
                     });
-                }else if(r==1){
+                }else if(r==1){//如果为管理员
+                    $(".return-apply").remove();//删除申请按钮
+                    $(".apply-list-btn").removeClass("apply-list-btn");//取消关闭按钮的宽度
                     $.each(data, function (i, apply) {
                         $("#list-main").append("<tr>" +
                                 "<td>" + apply.hostname + "</td>" +
-                                "<td>" + apply.eventname + "</td>" +
+                                "<td data-id='"+apply.applyid+"'>" + apply.eventname + "</td>" +
                                 "<td>" + apply.eventype + "</td>" +
-                                "<td><button class='btn'>通过申请</button></td>" +
+                                "<td><button class='pass-btn'>通过申请</button></td>" +
                                 "</tr>");
                     });
                 }
@@ -427,7 +438,7 @@
         });
     }
 
-    //点击审核通过的td 弹框
+    //点击已经审核通过的td 弹框
     function getdetail(obj) {
 
         $(".apply-detail").animate({top: '0'}, 300);
@@ -485,6 +496,22 @@
         $("#postapply .apn").attr("value", $(this).parent().data("apn")-1);
     });
 
+    //点击确认申请
+    $(".pass-btn").live("click",function(){
+        var s= $(this).parent().prev().prev();
+        if(confirm('确定通过"'+ s.text()+'"的申请吗？\n注：此选项会删除同时段的其他申请'))
+        {
+            $.ajax({
+                type: "GET",
+                url: "apply?method=pass",
+                data: {"id": s.data("id")},
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+    });
 
     function apntostr(apn) {
         var str;
