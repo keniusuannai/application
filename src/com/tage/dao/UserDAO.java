@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.tage.bean.User;
 import com.tage.util.JdbcUtils;
@@ -72,6 +74,30 @@ public class UserDAO {
 			JdbcUtils.close(rs, ps, conn);
 		}
 		return flag;
+	}
+
+	public static Map<String, String> check(int userid) {
+		// TODO Auto-generated method stub
+		Map<String,String> map = new HashMap<String,String>();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			conn = JdbcUtils.getConnection();
+			String sql = "select * from user_info where userid = '"
+					+ userid+"'";
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				map.put("organize",rs.getString(5));
+				map.put("right", String.valueOf(rs.getInt(8)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JdbcUtils.close(rs, ps, conn);
+		}
+		return map;
 	}
 
 }

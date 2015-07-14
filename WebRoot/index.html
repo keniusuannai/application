@@ -191,6 +191,7 @@
         <span><span id="year"></span>年 <span id="month"></span>月</span>
         <button id="suf">>></button>
     </div>
+    当前在线账户：<span id="user"></span>,<form action="/application/user?method=logout" method="GET" style="display: inline-block;margin-left: 8px;"><button>注销</button></form>
     <span id="tip">空白处可点击申请场地</span>
     <table id="table-main" cellpadding="10" cellspacing="0">
         <thead>
@@ -282,6 +283,17 @@
                     }
 
                 });
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "user?method=check",
+            dataType: "json",
+            success: function (data) {
+                var user = $("#user");
+                user.text(data[0].organize);
+                user.data("right",data[0].right);
             }
         });
     });
@@ -388,15 +400,29 @@
             dataType: "json",
             success: function (data) {
                 $('#list-main').empty();   //清空弹框里面的所有内容
-                $.each(data, function (i, apply) {
-                    var str = apply.status == 0 ? "正在审核" : "已通过";
-                    $("#list-main").append("<tr>" +
-                    "<td>" + apply.hostname + "</td>" +
-                    "<td>" + apply.eventname + "</td>" +
-                    "<td>" + apply.eventype + "</td>" +
-                    "<td>" + str + "</td>" +
-                    "</tr>");
-                });
+                //判断当前用户的权限
+                var r = $("#user").data("right");
+                if(r==0){
+                    $.each(data, function (i, apply) {
+                        var str = apply.status == 0 ? "正在审核" : "已通过";
+                        $("#list-main").append("<tr>" +
+                                "<td>" + apply.hostname + "</td>" +
+                                "<td>" + apply.eventname + "</td>" +
+                                "<td>" + apply.eventype + "</td>" +
+                                "<td>" + str + "</td>" +
+                                "</tr>");
+                    });
+                }else if(r==1){
+                    $.each(data, function (i, apply) {
+                        $("#list-main").append("<tr>" +
+                                "<td>" + apply.hostname + "</td>" +
+                                "<td>" + apply.eventname + "</td>" +
+                                "<td>" + apply.eventype + "</td>" +
+                                "<td><button class='btn'>通过申请</button></td>" +
+                                "</tr>");
+                    });
+                }
+
             }
         });
     }
