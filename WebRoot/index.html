@@ -286,8 +286,8 @@
                         td.text("活动详情");//更改td内容
                     }else if(apply.status==0){//如果活动申请但还未有通过的，则当前td的标签+1，td变黄
                         td.addClass("yellowtd");
-                        var i=td.find(".badge").text();
-                        td.html("<span class='badge badge-info'>"+(++i)+"</span>");
+//                        var i=td.find(".badge").text();
+//                        td.html("<span class='badge badge-info'>"+(++i)+"</span>");
                     }
 
                 });
@@ -508,6 +508,8 @@
                 dataType: "json",
                 success: function (data) {
                     console.log(data);
+                    $(".apply-post").animate({top: '-361px'}, 200);
+                    window.location.reload();//刷新页面
                 }
             });
         }
@@ -551,6 +553,7 @@
                 if(data){
                     alert("申请成功，请等待审核！");
                     $(".apply-post").animate({top: '-361px'}, 200);
+                    window.location.reload();//刷新页面
                 }
             }
         });

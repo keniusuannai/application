@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.mysql.jdbc.CallableStatement;
 import com.tage.bean.Apply;
 import com.tage.util.JdbcUtils;
 
@@ -242,23 +243,21 @@ public class ApplyDAO {
 	// 删除同时段的其他活动
 	public static void deleteother(int id) {
 		Connection conn = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		boolean flag = true;
+		CallableStatement cstmt = null;
 		try {
 			conn = JdbcUtils.getConnection();
-			String sql = "create table tmp as select hostyear,hostmonth,hostapn from apply_info  where applyid='"
-					+ id
-					+ "';"
-					+ "delete from apply_info where (hostyear,hostmonth,hostapn) in (select hostyear,hostmonth,hostapn from tmp);"
-					+ "drop table tmp;";
-			ps = conn.prepareStatement(sql);
-			ps.executeUpdate();
+			cstmt =  (CallableStatement) conn.prepareCall("call delapply(?)");  
+			cstmt.setInt(1, id);  // Set input parameter
+			cstmt.executeUpdate();  // Call the stored procedure
 		} catch (SQLException e) {
-			flag = false;
 			e.printStackTrace();
 		} finally {
-			JdbcUtils.close(rs, ps, conn);
+			try {
+				cstmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
 		}
 	}
 
